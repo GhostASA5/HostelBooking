@@ -14,7 +14,7 @@ public interface HotelMapper {
 
     Hotel hotelCreateToHotel(HotelCreateRequest request);
 
-    @Mapping(source = "userId", target = "id")
+    @Mapping(source = "hotelId", target = "id")
     Hotel hotelUpdateToHotel(Long hotelId, HotelUpdateRequest request);
 
     HotelResponse hotelToResponse(Hotel hotel);
