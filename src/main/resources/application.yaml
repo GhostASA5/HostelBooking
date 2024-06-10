@@ -13,3 +13,6 @@ spring:
       connection-init-sql: create schema if not exists booking
       connection-timeout: 10000
 
+server:
+  port: 8088
+

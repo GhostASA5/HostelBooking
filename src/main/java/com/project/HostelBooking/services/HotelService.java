@@ -51,7 +51,8 @@ public class HotelService {
 
         if (excitedHotel.isPresent()){
             hotelRepository.deleteById(id);
+        } else {
+            throw new HotelNotFoundException(MessageFormat.format("Отель с id {0} не найден.", id));
         }
-        throw new HotelNotFoundException(MessageFormat.format("Отель с id {0} не найден.", id));
     }
 }
