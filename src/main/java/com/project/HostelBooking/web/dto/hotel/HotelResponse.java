@@ -1,6 +1,10 @@
 package com.project.HostelBooking.web.dto.hotel;
 
+import com.project.HostelBooking.web.dto.room.RoomResponse;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class HotelResponse {
@@ -20,4 +24,6 @@ public class HotelResponse {
     private Double rating;
 
     private Integer markCount;
+
+    private List<RoomResponse> rooms = new ArrayList<>();
 }

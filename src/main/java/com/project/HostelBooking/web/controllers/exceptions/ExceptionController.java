@@ -1,6 +1,7 @@
 package com.project.HostelBooking.web.controllers.exceptions;
 
 import com.project.HostelBooking.exceptions.HotelNotFoundException;
+import com.project.HostelBooking.exceptions.RoomNotFoundException;
 import com.project.HostelBooking.web.dto.errors.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,12 @@ public class ExceptionController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(ex.getLocalizedMessage()));
     }
 
+    @ExceptionHandler(RoomNotFoundException.class)
+    public ResponseEntity<ErrorResponse> failedVerify(RoomNotFoundException ex) {
+        log.error("Ошибка при попытке получить сущность комнаты", ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(ex.getLocalizedMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> failedValid(MethodArgumentNotValidException ex) {
         log.error("Ошибка валидации данных", ex);
@@ -32,7 +39,6 @@ public class ExceptionController {
                 .orElse("Ошибка валидации");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(errorMessage));
     }
-
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
