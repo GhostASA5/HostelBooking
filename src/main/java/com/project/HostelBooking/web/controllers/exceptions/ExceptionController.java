@@ -1,9 +1,6 @@
 package com.project.HostelBooking.web.controllers.exceptions;
 
-import com.project.HostelBooking.exceptions.HotelNotFoundException;
-import com.project.HostelBooking.exceptions.RoomNotFoundException;
-import com.project.HostelBooking.exceptions.UserAlreadyExistException;
-import com.project.HostelBooking.exceptions.UserNotFoundException;
+import com.project.HostelBooking.exceptions.*;
 import com.project.HostelBooking.web.dto.errors.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -39,6 +36,12 @@ public class ExceptionController {
     @ExceptionHandler(UserAlreadyExistException.class)
     public ResponseEntity<ErrorResponse> userAlreadyExist(UserAlreadyExistException ex) {
         log.error("Пользователь с таким именем уже существует", ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(ex.getLocalizedMessage()));
+    }
+
+    @ExceptionHandler(UnavailableDateException.class)
+    public ResponseEntity<ErrorResponse> dateAlreadyBooking(UnavailableDateException ex) {
+        log.error("Номер уже забронирован в выбранные даты", ex);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(ex.getLocalizedMessage()));
     }
 

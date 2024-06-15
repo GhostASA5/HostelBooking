@@ -1,5 +1,6 @@
 package com.project.HostelBooking.model.user;
 
+import com.project.HostelBooking.model.Booking;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,4 +29,7 @@ public class User {
     @ToString.Exclude
     @Builder.Default
     private List<Role> roles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Booking> bookings = new ArrayList<>();
 }

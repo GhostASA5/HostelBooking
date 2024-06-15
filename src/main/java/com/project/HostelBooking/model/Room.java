@@ -31,4 +31,17 @@ public class Room {
     @ManyToOne
     @JoinColumn(name = "hotel_id")
     private Hotel hotel;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Booking> bookings = new ArrayList<>();
+
+    public String toString(){
+        return "Room ID: " + id + "\n" +
+                "Name: " + name + "\n" +
+                "Description: " + description + "\n" +
+                "Number: " + number + "\n" +
+                "Price: " + price + "\n" +
+                "Max People Count: " + maxPeopleCount + "\n" +
+                "Unavailable Dates: " + unavailableDates.stream().map(UnavailableDate::getUnavailableDate) + "\n";
+    }
 }

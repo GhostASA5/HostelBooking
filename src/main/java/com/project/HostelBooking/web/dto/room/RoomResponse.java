@@ -1,9 +1,9 @@
 package com.project.HostelBooking.web.dto.room;
 
-import com.project.HostelBooking.model.UnavailableDate;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +22,6 @@ public class RoomResponse {
 
     private Integer maxPeopleCount;
 
-    private List<UnavailableDate> unavailableDates = new ArrayList<>();
+    private List<LocalDate> unavailableDates = new ArrayList<>();
 
 }
