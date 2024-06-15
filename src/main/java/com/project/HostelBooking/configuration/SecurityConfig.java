@@ -46,6 +46,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
         http.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, "/api/user/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/hotel/**").permitAll()
+                        .requestMatchers("/api/hotel/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/room/**").permitAll()
+                        .requestMatchers("/api/room/**").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/booking/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
