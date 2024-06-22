@@ -9,4 +9,6 @@ import java.util.List;
 public class HotelListResponse {
 
     private List<HotelResponse> hotels = new ArrayList<>();
+
+    private Integer totalHotelsCount;
 }

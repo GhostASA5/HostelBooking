@@ -4,6 +4,7 @@ import com.project.HostelBooking.exceptions.HotelNotFoundException;
 import com.project.HostelBooking.mappers.HotelMapper;
 import com.project.HostelBooking.model.Hotel;
 import com.project.HostelBooking.repositories.HotelRepository;
+import com.project.HostelBooking.repositories.HotelSpecification;
 import com.project.HostelBooking.utils.BeanUtils;
 import com.project.HostelBooking.web.dto.hotel.*;
 import com.project.HostelBooking.web.dto.rating.RatingRequest;
@@ -22,8 +23,9 @@ public class HotelService {
     private final HotelRepository hotelRepository;
     private final HotelMapper hotelMapper;
 
-    public HotelListResponse getAllHotels(Integer page, Integer size) {
-        return hotelMapper.hotelListToResponseList(hotelRepository.findAll(PageRequest.of(page, size)).getContent());
+    public HotelListResponse getAllHotels(int page, int size) {
+        return hotelMapper.hotelListToResponseList(hotelRepository.findAll(PageRequest.of(page, size)).getContent(),
+                hotelRepository.findAll().size());
     }
 
     public HotelResponse getHotelById(Long id) {
@@ -67,5 +69,11 @@ public class HotelService {
         hotel.setMarkCount(numberOfRating);
         hotelRepository.save(hotel);
         return new RatingResponse(hotel.getId(), newMark, rating);
+    }
+
+    public HotelListResponse getHotelsWithFilter(HotelFilterRequest filter, int page, int size) {
+        return hotelMapper.hotelListToResponseList(hotelRepository.findAll(
+                HotelSpecification.findWithFilter(filter), PageRequest.of(page, size)
+        ).getContent(), hotelRepository.findAll().size());
     }
 }

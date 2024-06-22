@@ -21,6 +21,13 @@ public class HotelController {
         return ResponseEntity.ok(hotelService.getAllHotels(pageNumber, pageSize));
     }
 
+    @GetMapping("/filter/{pageNumber}/{pageSize}")
+    public ResponseEntity<HotelListResponse> getHotelsWithFilter(@RequestBody HotelFilterRequest filter,
+                                                                 @PathVariable int pageNumber,
+                                                                 @PathVariable int pageSize){
+        return ResponseEntity.ok(hotelService.getHotelsWithFilter(filter, pageNumber, pageSize));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<HotelResponse> getHotelById(@PathVariable Long id){
         return ResponseEntity.ok(hotelService.getHotelById(id));

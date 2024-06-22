@@ -21,9 +21,10 @@ public interface HotelMapper {
 
     HotelUpdateResponse hotelToUpdateResponse(Hotel hotel);
 
-    default HotelListResponse hotelListToResponseList(List<Hotel> hotels) {
+    default HotelListResponse hotelListToResponseList(List<Hotel> hotels, int totalHotelsCount) {
         HotelListResponse response = new HotelListResponse();
         response.setHotels(hotels.stream().map(this::hotelToResponse).collect(Collectors.toList()));
+        response.setTotalHotelsCount(totalHotelsCount);
         return response;
     }
 }
