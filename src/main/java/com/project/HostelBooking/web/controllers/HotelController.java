@@ -2,6 +2,8 @@ package com.project.HostelBooking.web.controllers;
 
 import com.project.HostelBooking.services.HotelService;
 import com.project.HostelBooking.web.dto.hotel.*;
+import com.project.HostelBooking.web.dto.rating.RatingRequest;
+import com.project.HostelBooking.web.dto.rating.RatingResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +40,10 @@ public class HotelController {
     public ResponseEntity<Void> deleteHotel(@PathVariable Long id){
         hotelService.deleteHotel(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/rating")
+    public ResponseEntity<RatingResponse> addRating(@RequestBody @Valid RatingRequest request){
+        return ResponseEntity.ok(hotelService.addRating(request));
     }
 }
