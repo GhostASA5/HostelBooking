@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/hotel/**").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/room/**").permitAll()
                         .requestMatchers("/api/room/**").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/booking/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/booking/**").hasAnyRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

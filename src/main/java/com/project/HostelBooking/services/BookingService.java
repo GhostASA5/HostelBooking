@@ -13,6 +13,7 @@ import com.project.HostelBooking.web.dto.booking.BookingListResponse;
 import com.project.HostelBooking.web.dto.booking.BookingRequest;
 import com.project.HostelBooking.web.dto.booking.BookingResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -28,8 +29,8 @@ public class BookingService {
     private final UserRepository userRepository;
     private final BookingMapper bookingMapper;
 
-    public BookingListResponse getAllBookings() {
-        return bookingMapper.bookingListToResponseList(bookingRepository.findAll());
+    public BookingListResponse getAllBookings(int page, int size) {
+        return bookingMapper.bookingListToResponseList(bookingRepository.findAll(PageRequest.of(page, size)).getContent());
     }
 
     public BookingResponse addBooking(BookingRequest bookingRequest, String username) {

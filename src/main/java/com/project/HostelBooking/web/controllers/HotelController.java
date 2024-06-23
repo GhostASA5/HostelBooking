@@ -22,7 +22,7 @@ public class HotelController {
     }
 
     @GetMapping("/filter/{pageNumber}/{pageSize}")
-    public ResponseEntity<HotelListResponse> getHotelsWithFilter(@RequestBody HotelFilterRequest filter,
+    public ResponseEntity<HotelListResponse> getHotelsWithFilter(@RequestBody @Valid HotelFilterRequest filter,
                                                                  @PathVariable int pageNumber,
                                                                  @PathVariable int pageSize){
         return ResponseEntity.ok(hotelService.getHotelsWithFilter(filter, pageNumber, pageSize));

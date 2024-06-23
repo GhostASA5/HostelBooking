@@ -18,9 +18,9 @@ public class BookingController {
 
     private final BookingService bookingService;
 
-    @GetMapping
-    public ResponseEntity<BookingListResponse> getAllBooking(){
-        return ResponseEntity.ok(bookingService.getAllBookings());
+    @GetMapping("/{pageNumber}/{pageSize}")
+    public ResponseEntity<BookingListResponse> getAllBooking(@PathVariable int pageNumber, @PathVariable int pageSize){
+        return ResponseEntity.ok(bookingService.getAllBookings(pageNumber, pageSize));
     }
 
     @PostMapping

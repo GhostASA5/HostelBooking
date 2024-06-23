@@ -7,10 +7,14 @@ import com.project.HostelBooking.model.Hotel;
 import com.project.HostelBooking.model.Room;
 import com.project.HostelBooking.repositories.HotelRepository;
 import com.project.HostelBooking.repositories.RoomRepository;
+import com.project.HostelBooking.repositories.RoomSpecification;
 import com.project.HostelBooking.utils.BeanUtils;
+import com.project.HostelBooking.web.dto.room.RoomFilterRequest;
+import com.project.HostelBooking.web.dto.room.RoomListResponse;
 import com.project.HostelBooking.web.dto.room.RoomRequest;
 import com.project.HostelBooking.web.dto.room.RoomResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -23,6 +27,12 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final RoomMapper roomMapper;
     private final HotelRepository hotelRepository;
+
+    public RoomListResponse getRoomsWithFilter(RoomFilterRequest filter, int page, int size){
+        return roomMapper.roomListToResponseList(roomRepository.findAll(
+                RoomSpecification.findWithFilter(filter), PageRequest.of(page, size)
+        ).getContent());
+    }
 
     public RoomResponse getRoomById(Long id) {
         return roomMapper.roomToResponse(roomRepository.findById(id).
