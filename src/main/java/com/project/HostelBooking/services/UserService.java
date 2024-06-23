@@ -3,6 +3,7 @@ package com.project.HostelBooking.services;
 import com.project.HostelBooking.exceptions.UserAlreadyExistException;
 import com.project.HostelBooking.exceptions.UserNotFoundException;
 import com.project.HostelBooking.mappers.UserMapper;
+import com.project.HostelBooking.model.events.RegisterEvent;
 import com.project.HostelBooking.model.user.Role;
 import com.project.HostelBooking.model.user.User;
 import com.project.HostelBooking.repositories.UserRepository;
@@ -11,6 +12,8 @@ import com.project.HostelBooking.web.dto.user.UserListResponse;
 import com.project.HostelBooking.web.dto.user.UserRequest;
 import com.project.HostelBooking.web.dto.user.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final KafkaTemplate<String, RegisterEvent> kafkaTemplate;
+
+    @Value("${app.kafka.kafkaMessageRegisterTopic}")
+    private String registerTopic;
 
     public UserListResponse getAllUsers() {
         return userMapper.userListToResponseList(userRepository.findAll());
@@ -48,7 +55,13 @@ public class UserService {
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setRoles(Collections.singletonList(role));
         role.setUser(newUser);
-        return userMapper.userToResponse(userRepository.save(newUser));
+        userRepository.save(newUser);
+
+        RegisterEvent registerEvent = new RegisterEvent();
+        registerEvent.setUserId(newUser.getId());
+        kafkaTemplate.send(registerTopic, registerEvent);
+
+        return userMapper.userToResponse(newUser);
     }
 
     private void checkUserData(User newUser){

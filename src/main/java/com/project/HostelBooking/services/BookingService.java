@@ -6,6 +6,8 @@ import com.project.HostelBooking.mappers.BookingMapper;
 import com.project.HostelBooking.model.Booking;
 import com.project.HostelBooking.model.Room;
 import com.project.HostelBooking.model.UnavailableDate;
+import com.project.HostelBooking.model.events.BookingEvent;
+import com.project.HostelBooking.model.user.User;
 import com.project.HostelBooking.repositories.BookingRepository;
 import com.project.HostelBooking.repositories.RoomRepository;
 import com.project.HostelBooking.repositories.UserRepository;
@@ -13,7 +15,9 @@ import com.project.HostelBooking.web.dto.booking.BookingListResponse;
 import com.project.HostelBooking.web.dto.booking.BookingRequest;
 import com.project.HostelBooking.web.dto.booking.BookingResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
@@ -28,6 +32,10 @@ public class BookingService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final BookingMapper bookingMapper;
+    private final KafkaTemplate<String, BookingEvent> kafkaTemplate;
+
+    @Value("${app.kafka.kafkaMessageNewBookingTopic}")
+    private String newBookingTopic;
 
     public BookingListResponse getAllBookings(int page, int size) {
         return bookingMapper.bookingListToResponseList(bookingRepository.findAll(PageRequest.of(page, size)).getContent());
@@ -39,11 +47,19 @@ public class BookingService {
                 () -> new RoomNotFoundException(
                         MessageFormat.format("Комната с id {0} не найдена.", bookingRequest.getRoomId()))
         );
+        User user = userRepository.findByUsername(username);
         booking.setRoom(room);
-        booking.setUser(userRepository.findByUsername(username));
+        booking.setUser(user);
         if (!checkAvailableDates(booking)){
             throw new UnavailableDateException("Номер забронирован в выбранные даты.");
         }
+
+        BookingEvent bookingEvent = new BookingEvent();
+        bookingEvent.setUserId(user.getId());
+        bookingEvent.setCheckInDate(bookingRequest.getCheckInDate());
+        bookingEvent.setCheckOutDate(bookingRequest.getCheckOutDate());
+        kafkaTemplate.send(newBookingTopic, bookingEvent);
+
         return bookingMapper.bookingToBookingResponse(bookingRepository.save(booking));
     }
 
