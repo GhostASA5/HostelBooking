@@ -1,4 +1,4 @@
-package com.project.HostelBooking.repositories;
+package com.project.HostelBooking.repositories.jpa;
 
 import com.project.HostelBooking.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;

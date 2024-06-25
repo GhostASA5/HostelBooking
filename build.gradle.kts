@@ -38,7 +38,7 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
 	annotationProcessor("org.projectlombok:lombok")
-	runtimeOnly("org.postgresql:postgresql")
+	runtimeOnly("org.postgresql:postgresql:42.6.1")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -46,4 +46,19 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.withType<Jar> {
+	manifest {
+		attributes["Main-Class"] = "com.project.HostelBooking.HostelBookingApplication" // замените на ваш главный класс
+	}
+	from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+	duplicatesStrategy = DuplicatesStrategy.INCLUDE
+	archiveFileName.set("HotelBooking.jar")
+}
+
+tasks.register<Copy>("buildHotelBooking") {
+	dependsOn("jar") // убедитесь, что задача jar выполнена
+	from(tasks.named<Jar>("jar").flatMap { it.archiveFile })
+	into(file("docker/appdir"))
 }

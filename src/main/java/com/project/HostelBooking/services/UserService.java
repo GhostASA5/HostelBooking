@@ -6,7 +6,7 @@ import com.project.HostelBooking.mappers.UserMapper;
 import com.project.HostelBooking.model.events.RegisterEvent;
 import com.project.HostelBooking.model.user.Role;
 import com.project.HostelBooking.model.user.User;
-import com.project.HostelBooking.repositories.UserRepository;
+import com.project.HostelBooking.repositories.jpa.UserRepository;
 import com.project.HostelBooking.utils.BeanUtils;
 import com.project.HostelBooking.web.dto.user.UserListResponse;
 import com.project.HostelBooking.web.dto.user.UserRequest;

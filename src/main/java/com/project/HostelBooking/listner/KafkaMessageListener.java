@@ -2,8 +2,8 @@ package com.project.HostelBooking.listner;
 
 import com.project.HostelBooking.model.events.BookingEvent;
 import com.project.HostelBooking.model.events.RegisterEvent;
-import com.project.HostelBooking.repositories.events.BookingEventRepository;
-import com.project.HostelBooking.repositories.events.RegisterEventsRepository;
+import com.project.HostelBooking.repositories.mongo.BookingEventRepository;
+import com.project.HostelBooking.repositories.mongo.RegisterEventsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

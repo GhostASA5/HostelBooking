@@ -1,4 +1,4 @@
-package com.project.HostelBooking.repositories.events;
+package com.project.HostelBooking.repositories.mongo;
 
 import com.project.HostelBooking.model.events.BookingEvent;
 import org.springframework.data.mongodb.repository.MongoRepository;
