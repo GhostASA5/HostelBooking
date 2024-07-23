@@ -20,6 +20,7 @@ http://localhost:8080/swagger-ui/index.html
 - Gradle 8.8
 - Lombok
 - JDK 21
+- Apache Kafka
 
 ## Запуск проекта
 Проект можно запустить двумя способами:
